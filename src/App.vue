@@ -1,6 +1,8 @@
 <template>
 	<div id="app">
-		<Journeys />
+		<div class="container">
+			<Journeys />
+		</div><!-- /.container -->
 	</div>
 </template>
 

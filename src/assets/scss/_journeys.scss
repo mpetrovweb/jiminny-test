@@ -1,0 +1,57 @@
+/* ------------------------------------------------------------ *\
+	Journeys
+\* ------------------------------------------------------------ */
+
+.journeys {
+	& {
+		font-family: sans-serif;
+	}
+
+	&__head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
+
+		&__inner {
+			display: flex;
+			align-items: center;
+		}
+	}
+
+	&__title {
+		font-size: 26px;
+		margin-right: 15px;
+	}
+
+	&__button {
+		width: 70px;
+	}
+
+	&__meta {
+		margin-left: 20px;
+		font-size: 14px;
+
+		span {
+			display: inline-block;
+			margin-left: 5px;
+		}
+	}
+
+	&__table {
+		th {
+			padding: 7px;
+			background: #ee3584;
+			color: #fff;
+			text-align: left;
+		}
+
+		td {
+			padding: 20px 7px;
+		}
+
+		tr:nth-child(even) td {
+			background: #fafafa;
+		}
+	}
+}

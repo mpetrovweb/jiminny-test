@@ -1,4 +1,4 @@
-# jiminny-vue
+# jiminny-test
 
 ## Project setup
 ```
