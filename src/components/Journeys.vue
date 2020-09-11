@@ -25,43 +25,7 @@
 		</header><!-- /.journeys__head -->
 
 		<div class="journeys__body">
-			<div class="journeys__table">
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-
-							<th>Route</th>
-
-							<th>Timetable</th>
-
-							<th>Next Station</th>
-
-							<th>Train</th>
-						</tr>
-					</thead>
-
-					<tbody>
-						<template v-for="journey in journeys">
-							<tr :key="'transit-' + journey.train.id">
-								<td>{{ journey.name }}</td>
-
-								<td>{{ journey.route }}</td>
-
-								<td>
-									<template v-for="(station, index) in journey.timetable">
-										<span>{{ station.station }}</span> <br v-if="index > 0" />
-									</template>
-								</td>
-
-								<td>Next Station</td>
-
-								<td>{{ journey.train.name }}</td>
-							</tr>
-						</template>
-					</tbody>
-				</table>
-			</div><!-- /.table -->
+			<TrainsTable :journeys="journeys" />
 		</div><!-- /.journeys__body -->
 	</div>
 </template>
@@ -69,8 +33,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
+import TrainsTable from '@/components/journeys/TrainsTable';
+
 export default {
 	name: 'Journeys',
+
+	components: {
+		TrainsTable
+	},
 
 	data () {
 		return {

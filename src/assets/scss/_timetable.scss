@@ -1,0 +1,75 @@
+/* ------------------------------------------------------------ *\
+	Timetable
+\* ------------------------------------------------------------ */
+
+.timetable {
+	position: relative;
+	width: 600px;
+	height: 20px;
+
+	&__road {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		border: 1px solid #000;
+		background: url(/images/road-texture.jpg);
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+
+	&__train {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		width: 20px;
+		height: 20px;
+		line-height: 20px;
+		text-align: center;
+		border-radius: 50%;
+		background: #fff;
+		transform: translateX(-50%);
+	}
+}
+
+/* ------------------------------------------------------------ *\
+	Timetable Item
+\* ------------------------------------------------------------ */
+
+.timetable-item {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 20px;
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: -5px;
+		bottom: -5px;
+		left: 0;
+		width: 1px;
+		background: #000;
+	}
+
+	&__time {
+		position: absolute;
+		top: 100%;
+		right: 100%;
+		margin-top: -6px;
+		font-size: 12px;
+		transform-origin: 100% 100%;
+		transform: rotate(-90deg) translateY(50%);
+	}
+
+	&__station {
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		max-width: none;
+		margin: 0 0 10px -10px;
+	}
+}
