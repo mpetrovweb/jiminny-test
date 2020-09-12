@@ -18,13 +18,13 @@
 
 			<div class="journeys__head__inner">
 				<div class="journeys__meta">
-					<strong>Trains in Transit</strong>
+					<strong>Trains in Transit:</strong>
 
-					<span></span>
+					<span>{{ trains }}</span>
 				</div><!-- /.journeys__meta -->
 
 				<div class="journeys__meta">
-					<strong>Current Time</strong>
+					<strong>Current Time:</strong>
 
 					<span>{{ formatedCurrentTime }}</span>
 				</div><!-- /.journeys__meta -->
@@ -53,12 +53,26 @@ export default {
 	data () {
 		return {
 			isSpotting: false,
-			interval: null
+			interval: null,
+			noInTransitMessage: 'None'
 		}
 	},
 
 	computed: {
-		...mapGetters(['journeys','currentTime', 'formatedCurrentTime']),
+		...mapGetters([
+			'journeys',
+			'currentTime',
+			'formatedCurrentTime',
+			'trainsInTransit'
+		]),
+
+		trains() {
+			if ( this.trainsInTransit.length ) {
+				return this.trainsInTransit.join(', ');
+			} else {
+				return this.noInTransitMessage;
+			}
+		}
 	},
 
 	methods: {

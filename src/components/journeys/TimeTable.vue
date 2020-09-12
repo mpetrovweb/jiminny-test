@@ -15,30 +15,36 @@
 		</div><!-- /.timetable__train -->
 
 		<template v-for="(station, index) in timetable">
-			<div
-				class="timetable-item"
-				:style="`left: ${stationDistance(station.time)}px`"
-			>
-				<span class="timetable-item__time">
-					{{ formatTime(station.time) }}
-				</span>
-
-				<img class="timetable-item__station" src="/images/station.svg" alt="Station" width="20" height="16">
-			</div><!-- /.timetable-item -->
+			<Station
+				:station="station"
+				:stationDistance="stationDistance(station.time)"
+				:key="'station-' + index"
+			/>
 		</template>
 	</div><!-- /.timetable -->
 </template>
 
 <script>
 import moment from 'moment';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
+
+import Station from '@/components/journeys/Station';
 
 export default {
 	name: 'TimeTable',
 
+	components: {
+		Station
+	},
+
 	props: {
 		timetable: {
 			type: Array,
+			required: true
+		},
+
+		name: {
+			type: String,
 			required: true
 		}
 	},
@@ -49,18 +55,13 @@ export default {
 			spacePerMinute: 5,
 			maxDistance: 0,
 			trainDistance: 0,
-			nextStationIndex: 0
+			nextStationIndex: 0,
+			isInTransit: true
 		}
 	},
 
 	computed: {
 		...mapGetters(['currentTime']),
-
-		formatTime() {
-			return (time) => {
-				return moment(time).utc().format('HH:mm');
-			}
-		},
 
 		stationDistance() {
 			return (time) => {
@@ -81,6 +82,11 @@ export default {
 	},
 
 	methods: {
+		...mapMutations({
+			addTrainInTransit: 'ADD_TRAIN_IN_TRANSIT',
+			removeTrainInTransit: 'REMOVE_TRAIN_IN_TRANSIT'
+		}),
+
 		calcDistance(time, startTime) {
 			const duration = moment.duration(time.diff(startTime))
 			const durationInMinutes = duration.asMinutes();
@@ -105,24 +111,36 @@ export default {
 
 				this.$emit('changeStation', nextIndex);
 			}
+		},
+
+		subscribe() {
+			// Subscribing to the mutation to know
+			// when the time is updated
+			// Note: currentTime is updated deeply, so it is not reactive
+			this.unsubscribe = this.$store.subscribe((mutation) => {
+				if ( mutation.type === 'SET_CURRENT_TIME' ) {
+					this.trainDistance = this.calcDistance(this.currentTime, this.startHour);
+
+					if ( this.trainDistance > this.maxDistance ) {
+						this.trainDistance = this.maxDistance;
+					}
+
+					this.emitStationIndex();
+
+					if ( this.trainDistance == this.maxDistance && this.isInTransit ) {
+						this.isInTransit = false;
+
+						this.removeTrainInTransit(this.name);
+					}
+				}
+			});
 		}
 	},
 
 	created() {
-		// Subscribing to the mutation to know
-		// when the time is updated
-		// Note: currentTime is updated deeply, so it is not reactive
-		this.unsubscribe = this.$store.subscribe((mutation) => {
-			if ( mutation.type === 'SET_CURRENT_TIME' ) {
-				this.trainDistance = this.calcDistance(this.currentTime, this.startHour);
+		this.subscribe();
 
-				if ( this.trainDistance > this.maxDistance ) {
-					this.trainDistance = this.maxDistance;
-				}
-
-				this.emitStationIndex();
-			}
-		});
+		this.addTrainInTransit(this.name);
 	},
 
 	beforeDestroy() {

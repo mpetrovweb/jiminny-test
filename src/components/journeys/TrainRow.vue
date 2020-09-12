@@ -6,6 +6,7 @@
 
 		<td>
 			<TimeTable
+				:name="journey.train.name"
 				:timetable="journey.timetable"
 				@changeStation="changeStation"
 			/>

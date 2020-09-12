@@ -7,13 +7,15 @@ export default new Vuex.Store({
 	state: {
 		journeys: [],
 		currentTime: null,
-		formatedCurrentTime: null
+		formatedCurrentTime: null,
+		trainsInTransit: []
 	},
 
 	getters: {
 		journeys: (state) => state.journeys,
 		currentTime: (state) => state.currentTime,
-		formatedCurrentTime: (state) => state.formatedCurrentTime
+		formatedCurrentTime: (state) => state.formatedCurrentTime,
+		trainsInTransit: (state) => state.trainsInTransit
 	},
 
 	mutations: {
@@ -24,6 +26,16 @@ export default new Vuex.Store({
 		SET_CURRENT_TIME(state, moment) {
 			state.currentTime = moment;
 			state.formatedCurrentTime = moment.format('HH:mm');
+		},
+
+		ADD_TRAIN_IN_TRANSIT(state, train) {
+			state.trainsInTransit.push(train);
+		},
+
+		REMOVE_TRAIN_IN_TRANSIT(state, train) {
+			const index = state.trainsInTransit.indexOf(train);
+
+			state.trainsInTransit.splice(index, 1);
 		}
 	},
 
