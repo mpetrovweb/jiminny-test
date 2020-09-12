@@ -7,10 +7,11 @@
 		<td>
 			<TimeTable
 				:timetable="journey.timetable"
+				@changeStation="changeStation"
 			/>
 		</td>
 
-		<td>Next Station</td>
+		<td>{{ journey.timetable[nextStationIndex].station }}</td>
 
 		<td>{{ journey.train.name }}</td>
 	</tr>
@@ -35,7 +36,13 @@ export default {
 
 	data () {
 		return {
+			nextStationIndex: 0
+		}
+	},
 
+	methods: {
+		changeStation(index) {
+			this.nextStationIndex = index;
 		}
 	}
 }

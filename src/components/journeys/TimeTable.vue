@@ -48,7 +48,8 @@ export default {
 			startHour: moment('09:00', 'HH:mm'),
 			spacePerMinute: 5,
 			maxDistance: 0,
-			trainDistance: 0
+			trainDistance: 0,
+			nextStationIndex: 0
 		}
 	},
 
@@ -76,10 +77,6 @@ export default {
 
 				return distance;
 			}
-		},
-
-		date() {
-			return this.currentTime._d;
 		}
 	},
 
@@ -90,6 +87,24 @@ export default {
 			const distance = durationInMinutes * this.spacePerMinute;
 
 			return distance;
+		},
+
+		getNextStationIndex() {
+			return this.timetable.findIndex(item => {
+				const time = moment(item.time).utc().format('HH:mm');
+
+				return moment(time, 'HH:mm').isAfter(this.currentTime);
+			})
+		},
+
+		emitStationIndex() {
+			const nextIndex = this.getNextStationIndex();
+
+			if ( nextIndex > this.nextStationIndex ) {
+				this.nextStationIndex = nextIndex;
+
+				this.$emit('changeStation', nextIndex);
+			}
 		}
 	},
 
@@ -97,13 +112,15 @@ export default {
 		// Subscribing to the mutation to know
 		// when the time is updated
 		// Note: currentTime is updated deeply, so it is not reactive
-		this.unsubscribe = this.$store.subscribe((mutation, state) => {
-			if (mutation.type === 'SET_CURRENT_TIME') {
+		this.unsubscribe = this.$store.subscribe((mutation) => {
+			if ( mutation.type === 'SET_CURRENT_TIME' ) {
 				this.trainDistance = this.calcDistance(this.currentTime, this.startHour);
 
 				if ( this.trainDistance > this.maxDistance ) {
 					this.trainDistance = this.maxDistance;
 				}
+
+				this.emitStationIndex();
 			}
 		});
 	},
