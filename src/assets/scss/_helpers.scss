@@ -1,0 +1,28 @@
+/* ------------------------------------------------------------ *\
+	Helpers
+\* ------------------------------------------------------------ */
+
+.visible-tablet-mobile,
+.visible-small-desktop-inline {
+	display: none !important;
+}
+
+@include media-breakpoint-between(lg,lg) {
+	.hidden-small-desktop {
+		display: none !important;
+	}
+
+	.visible-small-desktop-inline {
+		display: inline !important;
+	}
+}
+
+@include media-breakpoint-down(md) {
+	.hidden-tablet-mobile {
+		display: none !important;
+	}
+
+	.visible-tablet-mobile {
+		display: block !important;
+	}
+}

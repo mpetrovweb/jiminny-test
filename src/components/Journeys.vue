@@ -4,7 +4,7 @@
 			<div class="journeys__head__inner">
 				<h1 class="journeys__title">Jiminny Trainspotting</h1>
 
-				<div class="journeys__actions">
+				<div class="journeys__actions hidden-tablet-mobile">
 					<button
 						type="button"
 						class="journeys__button"
@@ -16,7 +16,7 @@
 				</div><!-- /.journeys__actions -->
 			</div><!-- /.journeys__head__inner -->
 
-			<div class="journeys__head__inner">
+			<div class="journeys__head__inner hidden-tablet-mobile">
 				<div class="journeys__meta">
 					<strong>Trains in Transit:</strong>
 

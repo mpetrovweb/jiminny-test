@@ -3,13 +3,13 @@
 		<table>
 			<thead>
 				<tr>
-					<th>Name</th>
+					<th>Name <span class="visible-small-desktop-inline">/ Route</span></th>
 
-					<th>Route</th>
+					<th class="hidden-small-desktop">Route</th>
 
 					<th>Timetable</th>
 
-					<th>Next Station</th>
+					<th class="hidden-tablet-mobile">Next Station</th>
 
 					<th>Train</th>
 				</tr>

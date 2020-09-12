@@ -35,6 +35,6 @@ export default {
 				return moment(time).utc().format('HH:mm');
 			}
 		}
-	},
+	}
 }
 </script>

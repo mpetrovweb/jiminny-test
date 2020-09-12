@@ -54,4 +54,20 @@
 			background: #fafafa;
 		}
 	}
+
+	/* === Mobile === */
+	@include media-breakpoint-down(sm) {
+		&__table {
+			position: relative;
+			left: 50%;
+			width: 100vw;
+			padding: 0 5%;
+			transform: translateX(-50%);
+			overflow-x: auto;
+
+			table {
+				width: 600px;
+			}
+		}
+	}
 }
