@@ -1,0 +1,7 @@
+@mixin fadeIn {
+	@for $i from 1 through 20 {
+		&:nth-child(#{$i}) {
+			animation: fadeIn .3s #{.5 + ($i * .1)}s forwards;
+		}
+	}
+}

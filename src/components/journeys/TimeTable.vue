@@ -1,26 +1,30 @@
 <template>
 	<div class="timetable">
-		<div
-			class="timetable__road"
-			:style="`width: ${maxDistance}px`"
-		>
+		<div class="timetable__inner">
+			<div
+				class="timetable__road"
+				:style="`width: ${maxDistance}px`"
+			>
 
-		</div><!-- /.timetable__road -->
+			</div><!-- /.timetable__road -->
+		</div><!-- /.timetable__inner -->
 
 		<div
 			class="timetable__train"
-			:style="`transform: translate3D(${trainDistance}px, 0, 0);`"
+			:style="`transform: translate3D(${trainDistance}px, 0, 0) rotate(${rotation}deg);`"
 		>
 			<img src="/images/train.svg" alt="Train" width="16" height="16">
 		</div><!-- /.timetable__train -->
 
-		<template v-for="(station, index) in timetable">
-			<Station
-				:station="station"
-				:stationDistance="stationDistance(station.time)"
-				:key="'station-' + index"
-			/>
-		</template>
+		<div class="timetable-items">
+			<template v-for="(station, index) in timetable">
+				<Station
+					:station="station"
+					:stationDistance="stationDistance(station.time)"
+					:key="'station-' + index"
+				/>
+			</template>
+		</div><!-- /.timetable-items -->
 	</div><!-- /.timetable -->
 </template>
 
@@ -78,6 +82,14 @@ export default {
 
 				return distance;
 			}
+		},
+
+		rotation() {
+			if ( this.trainDistance == 0 || this.trainDistance == this.maxDistance ) {
+				return 0;
+			} else {
+				return this.isOdd(this.trainDistance) ? 8 : -8;
+			}
 		}
 	},
 
@@ -134,7 +146,11 @@ export default {
 					}
 				}
 			});
-		}
+		},
+
+		isOdd(number) {
+			return number % 2;
+		},
 	},
 
 	created() {
