@@ -26,11 +26,13 @@
 		z-index: 1;
 		width: 20px;
 		height: 20px;
+		margin-left: -10px;
 		line-height: 20px;
 		text-align: center;
 		border-radius: 50%;
 		background: #fff;
-		transform: translateX(-50%);
+		will-change: transform;
+		transition: transform .5s linear;
 	}
 }
 

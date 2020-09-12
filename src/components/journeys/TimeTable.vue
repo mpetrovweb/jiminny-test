@@ -7,14 +7,17 @@
 
 		</div><!-- /.timetable__road -->
 
-		<div class="timetable__train">
+		<div
+			class="timetable__train"
+			:style="`transform: translate3D(${trainDistance}px, 0, 0);`"
+		>
 			<img src="/images/train.svg" alt="Train" width="16" height="16">
 		</div><!-- /.timetable__train -->
 
 		<template v-for="(station, index) in timetable">
 			<div
 				class="timetable-item"
-				:style="`left: ${calcDistance(station.time)}px`"
+				:style="`left: ${stationDistance(station.time)}px`"
 			>
 				<span class="timetable-item__time">
 					{{ formatTime(station.time) }}
@@ -28,6 +31,7 @@
 
 <script>
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 
 export default {
 	name: 'TimeTable',
@@ -43,27 +47,28 @@ export default {
 		return {
 			startHour: moment('09:00', 'HH:mm'),
 			spacePerMinute: 5,
-			maxDistance: 0
+			maxDistance: 0,
+			trainDistance: 0
 		}
 	},
 
 	computed: {
+		...mapGetters(['currentTime']),
+
 		formatTime() {
 			return (time) => {
 				return moment(time).utc().format('HH:mm');
 			}
 		},
 
-		calcDistance() {
+		stationDistance() {
 			return (time) => {
 				const start = moment(time).utc().set({
 					hour: this.startHour.get('hour'),
 					minutes: this.startHour.get('minutes')
 				});
 
-				const duration = moment.duration(moment(time).diff(start))
-				const durationInMinutes = duration.asMinutes();
-				const distance = durationInMinutes * this.spacePerMinute;
+				const distance = this.calcDistance(moment(time), start);
 
 				if ( this.maxDistance < distance ) {
 					this.maxDistance = distance;
@@ -71,7 +76,40 @@ export default {
 
 				return distance;
 			}
+		},
+
+		date() {
+			return this.currentTime._d;
 		}
+	},
+
+	methods: {
+		calcDistance(time, startTime) {
+			const duration = moment.duration(time.diff(startTime))
+			const durationInMinutes = duration.asMinutes();
+			const distance = durationInMinutes * this.spacePerMinute;
+
+			return distance;
+		}
+	},
+
+	created() {
+		// Subscribing to the mutation to know
+		// when the time is updated
+		// Note: currentTime is updated deeply, so it is not reactive
+		this.unsubscribe = this.$store.subscribe((mutation, state) => {
+			if (mutation.type === 'SET_CURRENT_TIME') {
+				this.trainDistance = this.calcDistance(this.currentTime, this.startHour);
+
+				if ( this.trainDistance > this.maxDistance ) {
+					this.trainDistance = this.maxDistance;
+				}
+			}
+		});
+	},
+
+	beforeDestroy() {
+		this.unsubscribe();
 	}
 }
 </script>

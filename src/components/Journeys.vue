@@ -70,15 +70,15 @@ export default {
 
 		toggleSpotting() {
 			if ( this.isSpotting ) {
-				clearInterval(this.interval);
-
 				this.isSpotting = false;
+
+				clearInterval(this.interval);
 			} else {
+				this.isSpotting = true;
+
 				this.interval = setInterval(() => {
 					this.setCurrentTime(this.currentTime.add(1, 'minutes'));
 				}, 500);
-
-				this.isSpotting = true;
 			}
 		}
 	},
