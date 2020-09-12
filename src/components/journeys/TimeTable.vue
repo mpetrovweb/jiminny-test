@@ -61,7 +61,7 @@ export default {
 					minutes: this.startHour.get('minutes')
 				});
 
-				const duration = moment.duration(moment(time).diff(moment(start)))
+				const duration = moment.duration(moment(time).diff(start))
 				const durationInMinutes = duration.asMinutes();
 				const distance = durationInMinutes * this.spacePerMinute;
 
@@ -72,10 +72,6 @@ export default {
 				return distance;
 			}
 		}
-	},
-
-	methodos() {
-
 	}
 }
 </script>

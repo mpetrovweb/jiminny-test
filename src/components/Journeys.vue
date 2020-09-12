@@ -5,7 +5,14 @@
 				<h1 class="journeys__title">Jiminny Trainspotting</h1>
 
 				<div class="journeys__actions">
-					<button type="button" class="journeys__button">Start</button>
+					<button
+						type="button"
+						class="journeys__button"
+						@click="toggleSpotting"
+					>
+						<template v-if="!isSpotting"> Start </template>
+						<template v-else> Stop </template>
+					</button>
 				</div><!-- /.journeys__actions -->
 			</div><!-- /.journeys__head__inner -->
 
@@ -19,7 +26,7 @@
 				<div class="journeys__meta">
 					<strong>Current Time</strong>
 
-					<span>{{currentTime}}</span>
+					<span>{{ formatedCurrentTime }}</span>
 				</div><!-- /.journeys__meta -->
 			</div><!-- /.journeys__head__inner -->
 		</header><!-- /.journeys__head -->
@@ -31,7 +38,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import moment from 'moment';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 import TrainsTable from '@/components/journeys/TrainsTable';
 
@@ -44,20 +52,41 @@ export default {
 
 	data () {
 		return {
-			currentTime: '09:00'
+			isSpotting: false,
+			interval: null
 		}
 	},
 
 	computed: {
-		...mapGetters(['journeys'])
+		...mapGetters(['journeys','currentTime', 'formatedCurrentTime']),
 	},
 
 	methods: {
-		...mapActions(['fetchJourneys'])
+		...mapMutations({
+			setCurrentTime: 'SET_CURRENT_TIME'
+		}),
+
+		...mapActions(['fetchJourneys']),
+
+		toggleSpotting() {
+			if ( this.isSpotting ) {
+				clearInterval(this.interval);
+
+				this.isSpotting = false;
+			} else {
+				this.interval = setInterval(() => {
+					this.setCurrentTime(this.currentTime.add(1, 'minutes'));
+				}, 500);
+
+				this.isSpotting = true;
+			}
+		}
 	},
 
 	created() {
 		this.fetchJourneys();
+
+		this.setCurrentTime(moment('09:00', 'HH:mm'));
 	}
 }
 </script>
